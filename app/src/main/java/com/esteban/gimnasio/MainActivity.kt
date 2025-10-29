@@ -22,6 +22,18 @@ class MainActivity : AppCompatActivity() {
         val rememberMeCheckbox: CheckBox = findViewById(R.id.checkbox_remember)
         val createAccountTextView: TextView = findViewById(R.id.text_create_account)
 
+        // ------ //
+
+        // Apuntes de ROOM - hay un if para precargar la BBDD
+
+        // ------ //
+
+        // ------ //
+
+        // Si el check esta marcado, coger el unico usuario de la tabla remmber me y ponerlo en los campos
+
+        // ------ //
+
         // 2. Manejar el evento de clic del botón "Iniciar Sesión"
         loginButton.setOnClickListener {
             // 3. Obtener el texto de los campos
@@ -34,13 +46,23 @@ class MainActivity : AppCompatActivity() {
                 // Si algún campo está vacío, mostramos una alerta
                 Toast.makeText(this, "Por favor, ingresa usuario y contraseña.", Toast.LENGTH_SHORT).show()
             } else {
+
+                // ------ //
+
+                // poner un if para comprobar el user/pass
+                // Apuntes de ROOM - Como se hace una select
+
+                // ------ //
+
+
                 // Si ambos campos están llenos, mostramos los datos (en una app real aquí harías la llamada a tu servidor)
                 val mensaje = "Iniciando sesión con: $username. Recuérdame: $rememberMe"
                 Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
 
                 // Aquí iría el código para navegar a la pantalla principal (MainActivity)
-                // val intent = Intent(this, MainActivity::class.java)
-                // startActivity(intent)
+                val intent = Intent(this, WorkoutsActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
 
@@ -54,5 +76,11 @@ class MainActivity : AppCompatActivity() {
             // startActivity(intent)
             startActivity(intent)
         }
+
+        // ------ //
+
+        // Evento del check para ok/nook
+
+        // ------ //
     }
 }
