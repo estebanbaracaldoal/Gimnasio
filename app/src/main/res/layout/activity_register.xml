@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="32dp"
+        android:paddingTop="32dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="64dp">
+        <ImageView
+        android:id="@+id/img_logo_gym"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="32dp"
+        android:contentDescription="@string/gym_logo"
+        android:src="@drawable/logo_gym"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_title_registro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/new_user_registration"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_logo_gym" />
+
+        <EditText
+            android:id="@+id/edit_text_reg_login"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
+            android:autofillHints="username"
+            android:hint="@string/username_identifier"
+            android:inputType="textPersonName"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_title_registro"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/edit_text_reg_pass"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints="password"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_reg_login"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/edit_text_reg_nombre"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints="name"
+            android:hint="@string/first_name"
+            android:inputType="textPersonName|textCapWords"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_reg_pass"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/edit_text_reg_apellidos"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints="familyName"
+            android:hint="@string/last_name"
+            android:inputType="textPersonName|textCapWords"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_reg_nombre"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/edit_text_reg_email"
+            android:textColor="@android:color/black"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints="emailAddress"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_reg_apellidos" />
+
+        <EditText
+            android:id="@+id/edit_text_reg_fecha_nac"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:clickable="true"
+            android:focusable="true"
+            android:hint="@string/date_of_birth_dd_mm_yyyy"
+            android:inputType="date"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_reg_email"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/text_spinner_label"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="28dp"
+            android:gravity="center_vertical"
+            android:text="@string/user_type"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_reg_fecha_nac" />
+
+        <Spinner
+            android:id="@+id/spinner_tipo_usuario"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/text_spinner_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_spinner_label"
+            app:layout_constraintTop_toTopOf="@id/text_spinner_label" />
+
+        <Button
+            android:id="@+id/button_registro_confirm"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/register"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinner_tipo_usuario" />
+
+        <Button
+            android:id="@+id/button_volver"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/go_back_to_login"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_registro_confirm" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

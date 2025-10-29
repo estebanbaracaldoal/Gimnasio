@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WorkoutsActivity">
+
+    <ImageView
+        android:id="@+id/iv_gym_logo"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/content_description_gym_logo"
+        android:src="@drawable/logo_gym"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/title_workouts"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_gym_logo"
+        app:layout_constraintStart_toEndOf="@+id/iv_gym_logo"
+        app:layout_constraintTop_toTopOf="@+id/iv_gym_logo" />
+
+    <ImageButton
+        android:id="@+id/btn_profile_trainer"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/button_profile"
+        android:src="@mipmap/ic_person"
+        app:layout_constraintBottom_toTopOf="@+id/btn_filter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_title_trainer"
+        tools:ignore="ContentDescription" />
+
+    <EditText
+        android:id="@+id/et_filter_level"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints="level"
+        android:hint="@string/hint_filter_level"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/btn_filter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_gym_logo"
+        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+    <Button
+        android:id="@+id/btn_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/button_filter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/et_filter_level"
+        app:layout_constraintBottom_toBottomOf="@+id/et_filter_level" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_workouts_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="64dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_filter_level"
+        tools:listitem="@layout/item_workout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurfaceContainerHigh"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btn_profile"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/button_profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_play"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/btn_play"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/button_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_back"
+            app:layout_constraintStart_toEndOf="@+id/btn_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/btn_back"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/button_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_play"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

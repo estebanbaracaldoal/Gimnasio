@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="32dp">
+
+        <ImageView
+            android:id="@+id/img_logo_gym"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/content_description_gym_logo"
+            android:src="@drawable/logo_gym"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_title_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/title_user_profile"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_logo_gym" />
+
+        <EditText
+            android:id="@+id/edit_text_login"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:autofillHints="username"
+            android:hint="@string/hint_profile_login"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_title_profile"
+            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/edit_text_nombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints="name"
+            android:hint="@string/hint_profile_first_name"
+            android:inputType="textPersonName|textCapWords"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_login"
+            tools:ignore="VisualLintTextFieldSize" />
+
+        <EditText
+            android:id="@+id/edit_text_apellidos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints="familyName"
+            android:hint="@string/hint_profile_last_name"
+            android:inputType="textPersonName|textCapWords"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_nombre"
+            tools:ignore="VisualLintTextFieldSize" />
+
+        <EditText
+            android:id="@+id/edit_text_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints="emailAddress"
+            android:hint="@string/hint_profile_email"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_apellidos"
+            tools:ignore="VisualLintTextFieldSize" />
+
+        <EditText
+            android:id="@+id/edit_text_fecha_nac"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints="birthday"
+            android:clickable="true"
+            android:focusable="true"
+            android:hint="@string/hint_profile_dob"
+            android:inputType="date"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_email"
+            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/text_label_theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/label_theme"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_fecha_nac" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/text_label_theme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_label_theme">
+            <RadioButton
+                android:id="@+id/radio_theme_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/option_light_theme" />
+            <RadioButton
+                android:id="@+id/radio_theme_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/option_dark_theme" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/text_label_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/label_language"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_group_theme" />
+
+        <Spinner
+            android:id="@+id/spinner_language"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:entries="@array/language_options"
+            app:layout_constraintBottom_toBottomOf="@id/text_label_language"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_label_language"
+            app:layout_constraintTop_toTopOf="@id/text_label_language" />
+
+
+        <Button
+            android:id="@+id/button_back_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/button_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_label_language"
+            tools:ignore="VisualLintButtonSize" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
