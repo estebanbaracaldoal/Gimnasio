@@ -35,20 +35,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_logo_gym" />
 
-        <ImageButton
-            android:id="@+id/btn_profile_trainer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/button_profile"
-            android:src="@mipmap/ic_person"
-            app:layout_constraintBottom_toBottomOf="@+id/text_title_trainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_title_trainer"
-            app:layout_constraintVertical_bias="0.437"
-            tools:ignore="ContentDescription" />
-
         <EditText
             android:id="@+id/edit_text_trainer_name"
             android:layout_width="0dp"
@@ -142,7 +128,7 @@
             android:id="@+id/button_back"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="@string/button_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

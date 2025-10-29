@@ -6,29 +6,29 @@ import androidx.room.PrimaryKey
 
 
 @Entity(
-    tableName = "users",)
-data class User(
+    tableName = "t_users",)
+data class EntiUser(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
-    @ColumnInfo(name = "login")
-    val login: String,
+    @ColumnInfo(name = "username")
+    val username: String,
 
-    @ColumnInfo(name = "password_hash")
-    val passwordHash: String,
+    @ColumnInfo(name = "password")
+    val password: String,
 
-    @ColumnInfo(name = "nombre")
-    val nombre: String,
+   @ColumnInfo(name = "firtsName")
+    val firstName: String,
 
-    @ColumnInfo(name = "apellidos")
-    val apellidos: String,
+    @ColumnInfo(name = "lastName")
+    val lastName: String,
 
     @ColumnInfo(name = "email")
     val email: String,
 
-    @ColumnInfo(name = "fecha_nacimiento")
-    val fechaNacimientoTimestamp: Long,
+    @ColumnInfo(name = "dateBirth")
+    val dateBirth: String,
 
-    @ColumnInfo(name = "tipo_usuario") // "Cliente" o "Entrenador"
-    val tipoUsuario: String
+    @ColumnInfo(name = "rememberMe")
+    val rememberMe: String,
 )

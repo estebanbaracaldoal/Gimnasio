@@ -29,20 +29,6 @@
         app:layout_constraintStart_toEndOf="@+id/iv_gym_logo"
         app:layout_constraintTop_toTopOf="@+id/iv_gym_logo" />
 
-    <ImageButton
-        android:id="@+id/btn_profile_trainer"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/button_profile"
-        android:src="@mipmap/ic_person"
-        app:layout_constraintBottom_toTopOf="@+id/btn_filter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_title_trainer"
-        tools:ignore="ContentDescription" />
-
     <EditText
         android:id="@+id/et_filter_level"
         android:layout_width="0dp"

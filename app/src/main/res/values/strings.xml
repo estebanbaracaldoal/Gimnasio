@@ -24,9 +24,9 @@
     <string name="go_back_to_login">Go back to Login</string>
 
     <!-->Config Spiner-->
-    <string-array name="tipo_usuario_array">
-        <item>Cliente</item>
-        <item>Entrenador</item>
+    <string-array name="array_user_type">
+        <item>User</item>
+        <item>Trainer</item>
     </string-array>
 
 
@@ -85,8 +85,8 @@
     <string name="option_english">English</string>
     <string name="button_back_to_workouts">Go back to Workouts</string>
     <string-array name="language_options">
-        <item>Español</item>
-        <item>Inglés</item>
+        <item>english</item>
+        <item>spanish</item>
     </string-array>
 
 

@@ -138,6 +138,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
+            android:entries="@array/array_user_type"
             app:layout_constraintBottom_toBottomOf="@id/text_spinner_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/text_spinner_label"
