@@ -85,23 +85,22 @@
             android:layout_height="wrap_content"
             android:text="@string/button_profile"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_play"
+            app:layout_constraintEnd_toStartOf="@+id/btn_center_action"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
         <Button
-            android:id="@+id/btn_play"
+            android:id="@+id/btn_center_action"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/button_play"
+            android:text="@string/button_add_new_workout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_back"
             app:layout_constraintStart_toEndOf="@+id/btn_profile"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck,VisualLintButtonSize" />
-
         <Button
             android:id="@+id/btn_back"
             style="@style/Widget.AppCompat.Button.Borderless"
@@ -110,9 +109,19 @@
             android:text="@string/button_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_play"
+            app:layout_constraintStart_toEndOf="@+id/btn_center_action"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/btn_new_workout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/button_add_new_workout"
+            android:visibility="gone"  app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

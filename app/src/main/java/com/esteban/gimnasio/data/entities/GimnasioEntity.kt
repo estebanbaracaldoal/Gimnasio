@@ -2,12 +2,17 @@ package com.esteban.gimnasio.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 
 @Entity(
-    tableName = "t_users",)
-data class EntiUser(
+    tableName = "t_users",
+    indices = [
+        Index(value = ["username"], unique = true),
+        Index(value = ["email"], unique = true)
+    ])
+data class GimnasioEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
@@ -17,7 +22,7 @@ data class EntiUser(
     @ColumnInfo(name = "password")
     val password: String,
 
-   @ColumnInfo(name = "firtsName")
+    @ColumnInfo(name = "firstName")
     val firstName: String,
 
     @ColumnInfo(name = "lastName")

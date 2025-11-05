@@ -3,6 +3,7 @@ package com.esteban.gimnasio
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -12,98 +13,152 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.esteban.gimnasio.data.MyRoomDatabase
-import com.esteban.gimnasio.data.entities.EntiUser
+import com.esteban.gimnasio.data.entities.GimnasioEntity
+import com.esteban.gimnasio.data.dao.GimnasioDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var usernameEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var rememberMeCheckbox: CheckBox
+    private lateinit var createAccountTextView: TextView
+    private lateinit var gimnasioDao: GimnasioDao
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val usernameEditText: EditText = findViewById(R.id.edit_text_username)
-        val passwordEditText: EditText = findViewById(R.id.edit_text_password)
-        val loginButton: Button = findViewById(R.id.button_login)
-        val rememberMeCheckbox: CheckBox = findViewById(R.id.checkbox_remember)
-        val createAccountTextView: TextView = findViewById(R.id.text_create_account)
+        usernameEditText = findViewById(R.id.edit_text_username)
+        passwordEditText = findViewById(R.id.edit_text_password)
+        val loginButton: Button = findViewById(R.id.login_button)
+        rememberMeCheckbox = findViewById(R.id.checkbox_remember)
+        createAccountTextView = findViewById(R.id.text_create_account)
 
-        val db = MyRoomDatabase(this)
+        val dbInstance = MyRoomDatabase.getDatabase(applicationContext)
+        gimnasioDao = dbInstance.gimnasioDao()
 
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
             val rememberMe = rememberMeCheckbox.isChecked
 
-            if(username.isEmpty() || password.isEmpty()){
+            if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Por favor ingrese un nombre de usuario y contraseña", Toast.LENGTH_SHORT).show()
             } else {
-                try {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val autentiUser = db.userDao().getUserByCredentials(username, password)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    try {
+                        val autentiUser = gimnasioDao.getUserByCredentials(username, password)
 
                         withContext(Dispatchers.Main) {
                             if (autentiUser != null) {
-                                Toast.makeText(this@MainActivity, "Bienvenido", Toast.LENGTH_SHORT).show()
 
                                 val sharedPref = getSharedPreferences("loginPrefs", MODE_PRIVATE)
-                                if(rememberMe){
+                                if (rememberMe) {
                                     sharedPref.edit {
                                         putString("username", username)
                                         putString("password", password)
+                                        remove("active_username")
                                     }
                                 } else {
                                     sharedPref.edit {
-                                        clear()
+                                        remove("username")
+                                        remove("password")
                                     }
                                 }
 
-                                when(autentiUser.rememberMe.lowercase()){
+                                sharedPref.edit {
+                                    putString("active_username", username)
+                                    apply()  
+									
+                                }
+
+                                val userRole = autentiUser.rememberMe.lowercase(Locale.getDefault())
+
+                                val intent = Intent(this@MainActivity, WorkoutsActivity::class.java).apply {
+                                    putExtra(WorkoutsActivity.USER_ROLE_KEY, username)
+                                }
+
+                                when (userRole) {
                                     "admin" -> {
-                                        val intent = Intent(this@MainActivity, TrainerActivity::class.java)
+
                                         startActivity(intent)
                                         finish()
                                     }
                                     "user" -> {
-                                        val intent = Intent(this@MainActivity, WorkoutsActivity::class.java)
                                         startActivity(intent)
                                         finish()
                                     }
                                     else -> {
-                                        Toast.makeText(this@MainActivity, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@MainActivity, "usuario desconocido", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             } else {
                                 Toast.makeText(this@MainActivity, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
                             }
                         }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@MainActivity, "Error en el sistema: ${e.message}", Toast.LENGTH_SHORT).show()
+                            e.printStackTrace()
+                        }
                     }
-
-                } catch (e: Exception) {
-                    Toast.makeText(this@MainActivity, "Error en el sistema: ${e.message}", Toast.LENGTH_SHORT).show()
-                    e.printStackTrace()
                 }
             }
         }
-
-        insertDatosUser(db)
+        insertDatosUser()
 
         createAccountTextView.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
             finish()
         }
+        loadRegisterUsernameAndPassword()
         loadSavedCredentialsRM()
     }
-    private fun loadSavedCredentialsRM() {
-        val usernameEditText: EditText = findViewById(R.id.edit_text_username)
-        val passwordEditText: EditText = findViewById(R.id.edit_text_password)
-        val rememberMeCheckbox: CheckBox = findViewById(R.id.checkbox_remember)
 
+    private fun insertDatosUser() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val userCount = gimnasioDao.countUsers()
+
+                if (userCount == 0L) {
+                    Log.d("Database", "Base de datos vacía. Insertando usuarios iniciales.")
+
+                    val adminUser = GimnasioEntity(
+                        username = "admin",
+                        password = "admin",
+                        firstName = "Admin",
+                        lastName = "Master",
+                        email = "admin@admin.com",
+                        dateBirth = "2025-10-31",
+                        rememberMe = "admin"
+                    )
+                    gimnasioDao.insertUser(adminUser)
+                    Log.d("Database", "Usuario Master creado")
+
+                    val user = GimnasioEntity(
+                        username = "user",
+                        password = "user",
+                        firstName = "User",
+                        lastName = "Regular",
+                        email = "user@user.com",
+                        dateBirth = "2025-10-31",
+                        rememberMe = "user"
+                    )
+                    gimnasioDao.insertUser(user)
+                }
+            } catch (e: Exception) {
+                Log.e("Database", "Error en la verificación: ${e.message}", e)
+            }
+        }
+    }
+    private fun loadSavedCredentialsRM() {
         val sharedPref = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
         val savedUsername = sharedPref.getString("username", null)
         val savedPassword = sharedPref.getString("password", null)
@@ -113,32 +168,20 @@ class MainActivity : AppCompatActivity() {
             passwordEditText.setText(savedPassword)
             rememberMeCheckbox.isChecked = true
         }
+
     }
-    private fun insertDatosUser(db: MyRoomDatabase) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val adminExists = db.userDao().getUserByLogin("admin")
-            if (adminExists == null) {
-                val adminUser = EntiUser(
-                    username = "admin",
-                    password = "admin",
-                    firstName = "Admin",
-                    lastName = "Admin",
-                    email = "admin@admin.com",
-                    dateBirth = "2025-10-31",
-                    rememberMe = "admin"
-                )
-                val user = EntiUser(
-                    username = "user",
-                    password = "user",
-                    firstName = "user",
-                    lastName = "user",
-                    email = "user@gimnasio.com",
-                    dateBirth = "01/01/2000",
-                    rememberMe = "user",
-                )
-                db.userDao().insertUser(adminUser)
-                db.userDao().insertUser(user)
-            }
+
+    private fun loadRegisterUsernameAndPassword() {
+        val registerUsername = intent.getStringExtra(RegisterActivity.REGIS_USERNAME)
+        val registerPassword = intent.getStringExtra(RegisterActivity.REGIS_PASSWORD)
+
+        if (registerUsername != null && registerPassword != null) {
+            usernameEditText.setText(registerUsername)
+            passwordEditText.setText(registerPassword)
+
+            Toast.makeText(this, "Registro exitoso.inicia sesion", Toast.LENGTH_SHORT).show()
+            intent.removeExtra(RegisterActivity.REGIS_USERNAME)
+            intent.removeExtra(RegisterActivity.REGIS_PASSWORD)
         }
     }
 }
