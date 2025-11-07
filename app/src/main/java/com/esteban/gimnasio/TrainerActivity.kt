@@ -63,8 +63,6 @@ class TrainerActivity : AppCompatActivity() {
         deleteButton.setOnClickListener { deleteWorkoutData() }
 
         backButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
             finish()
         }
     }
@@ -130,7 +128,6 @@ class TrainerActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun deleteWorkoutData() {
         if (workoutToModify != null) {
             lifecycleScope.launch {

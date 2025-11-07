@@ -1,6 +1,5 @@
 package com.esteban.gimnasio
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.esteban.gimnasio.data.MyRoomDatabase
-import com.esteban.gimnasio.data.entities.GimnasioEntity
 import com.esteban.gimnasio.data.dao.GimnasioDao
+import com.esteban.gimnasio.data.entities.GimnasioEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                                 }
 
                                 when (userRole) {
-                                    "admin" -> {
+                                    "Trainer" -> {
 
                                         startActivity(intent)
                                         finish()
@@ -159,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun loadSavedCredentialsRM() {
-        val sharedPref = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val savedUsername = sharedPref.getString("username", null)
         val savedPassword = sharedPref.getString("password", null)
 

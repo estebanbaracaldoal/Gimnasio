@@ -133,6 +133,7 @@ class RegisterActivity : AppCompatActivity() {
                         "User" -> "user"
                         else -> "user"
                     }
+
                 )
 
                 db.gimnasioDao().insertUser(newUser)

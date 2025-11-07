@@ -2,12 +2,15 @@ package com.esteban.gimnasio
 
 import android.app.ActivityOptions
 import android.content.Intent
-import android.os.Bundle
-import android.widget.Button
-import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +20,8 @@ import com.esteban.gimnasio.data.entities.GimnasioEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Locale
+import androidx.core.content.edit
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -29,7 +33,6 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var radioGroupTheme: RadioGroup
     private lateinit var spinnerLanguage: Spinner
-    private lateinit var backButton: Button
     private lateinit var saveButton: Button
     private lateinit var gimnasioDao: GimnasioDao
     private lateinit var preferences: SharedPreferences
@@ -41,18 +44,22 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+
+        val backButton : Button = findViewById(R.id.button_back_profile)
         val db = MyRoomDatabase.getDatabase(applicationContext)
         gimnasioDao = db.gimnasioDao()
-        preferences = getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE)
+        preferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE)
 
+        backButton.setOnClickListener {
+            finish()
+        }
 
         setupViews()
         loadUserProfile()
         setupListeners()
         loadPreferences()
-
-
     }
+
 
     private fun setupViews() {
         loginEditText = findViewById(R.id.edit_text_login)
@@ -60,21 +67,16 @@ class ProfileActivity : AppCompatActivity() {
         apellidosEditText = findViewById(R.id.edit_text_apellidos)
         emailEditText = findViewById(R.id.edit_text_email)
         fechaNacEditText = findViewById(R.id.edit_text_fecha_nac)
-
         radioGroupTheme = findViewById(R.id.radio_group_theme)
         spinnerLanguage = findViewById(R.id.spinner_language)
         saveButton = findViewById(R.id.button_save_profile)
-        backButton = findViewById(R.id.button_back_profile)
-
         loginEditText.isEnabled = false
     }
-
     private fun setupListeners() {
         saveButton.setOnClickListener {
             saveUserProfile()
             finish()
         }
-
 
         radioGroupTheme.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -84,18 +86,25 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedLanguage = parent?.getItemAtPosition(position).toString()
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                val selectedLanguage = parent.getItemAtPosition(position).toString()
                 if (selectedLanguage.isNotBlank() && getLanguagePref() != selectedLanguage) {
                     setAppLanguage(selectedLanguage)
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+//
         }
     }
 
     private fun loadUserProfile() {
-        val loggedInUsername = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        val loggedInUsername = getSharedPreferences("loginPrefs", MODE_PRIVATE)
             .getString("active_username", null)
 
         if (loggedInUsername == null) {
@@ -181,7 +190,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setAppTheme(mode: Int, themeName: String) {
-        preferences.edit().putString("app_theme", themeName).apply()
+        preferences.edit { putString("app_theme", themeName) }
 
         AppCompatDelegate.setDefaultNightMode(mode)
     }
@@ -191,7 +200,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setAppLanguage(languageName: String) {
-        preferences.edit().putString("app_language", languageName).apply()
+        preferences.edit { putString("app_language", languageName) }
 
         val localeCode = when (languageName) {
             "Español" -> "es"
@@ -206,13 +215,14 @@ class ProfileActivity : AppCompatActivity() {
         val refreshIntent = Intent(this, ProfileActivity::class.java)
         refreshIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        val options = ActivityOptions.makeCustomAnimation(
+        ActivityOptions.makeCustomAnimation(
             this,
             android.R.anim.fade_in, 
             android.R.anim.fade_out
         )
-        startActivity(refreshIntent, options.toBundle())
-        finish()
 
     }
+
+
+
 }
