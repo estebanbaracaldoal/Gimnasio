@@ -46,7 +46,7 @@
 
     <!--Entrenador -->
     <string name="title_trainer_management">Trainer Management</string>
-    <string name="hint_trainer_name">Trainer Name</string>
+    <string name="hint_trainer_name">Name Workout</string>
     <string name="hint_trainer_level">Level (e.g., Basic, Advanced)</string>
     <string name="hint_num_exercises">Number of Exercises</string>
     <string name="hint_workout_video_link">Workout Video (URL)</string>
@@ -88,6 +88,13 @@
         <item>english</item>
         <item>spanish</item>
     </string-array>
+
+    <!--ViewHolder-->
+    <string name="ID">ID</string>
+    <string name="username">username</string>
+    <string name="Password">Password</string>
+    <string name="button_add_new_workout">new workout</string>
+    <string name="button_save">Save</string>
 
 
 </resources>

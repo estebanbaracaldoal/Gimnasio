@@ -4,27 +4,39 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.esteban.gimnasio.data.dao.UserDao
-import com.esteban.gimnasio.data.entities.EntiUser
+import com.esteban.gimnasio.data.dao.GimnasioDao
+import com.esteban.gimnasio.data.MyRoomDatabase
+import com.esteban.gimnasio.data.dao.WorkoutDao
+import com.esteban.gimnasio.data.entities.GimnasioEntity
+import com.esteban.gimnasio.data.entities.Workout
 import kotlin.synchronized
 
+@Database(
+    entities = [Workout::class, GimnasioEntity::class],
+    version = 2,
+    exportSchema = false
+)
+abstract class MyRoomDatabase : RoomDatabase() {
 
-@Database (entities = [EntiUser::class], version = 1)
+    abstract fun workoutDao(): WorkoutDao
+    abstract fun gimnasioDao(): GimnasioDao
 
-abstract class MyRoomDatabase :  RoomDatabase() {
 
     companion object {
         @Volatile
-        private var instance: MyRoomDatabase? = null
-        private val LOCK = Any()
+        private var INSTANCE: MyRoomDatabase? = null
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
-            instance ?: buildDatabase(context).also()
-            {instance = it}
+        fun getDatabase(context: Context): MyRoomDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    MyRoomDatabase::class.java,
+                    "gimnasio_app_database"
+                )
+                    .build()
+                INSTANCE = instance
+                instance
+            }
         }
-        private fun buildDatabase(context: Context) = Room.databaseBuilder(context,
-            MyRoomDatabase::class.java,
-            "gimnasio.db").build()
     }
-    abstract fun userDao(): UserDao
 }
