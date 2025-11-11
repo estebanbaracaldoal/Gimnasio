@@ -1,18 +1,14 @@
 <resources>
     <string name="app_name">Gimnasio</string>
-
-    <!--activity login-->
-
     <string name="logo_of_my_application">Logo of my application</string>
-    <string name="username_or_email">Username or Email</string>
+    <string name="username">Username</string>
     <string name="remember_me">Remember Me</string>
     <string name="sign_in">Sign In</string>
-    <string name="don_t_have_an_account_create_one_here">Don\'t have an account? Create one here.</string>
-
+    <string name="create_account">Don\'t have an account? Create one here.</string>
 
     <!--activity register-->
     <string name="email">Email</string>
-    <string name="date_of_birth_dd_mm_yyyy">Date of Birth (DD/MM/YYYY)</string>
+    <string name="date_of_birth">Date of Birth (DD/MM/YYYY)</string>
     <string name="user_type">User Type:</string>
     <string name="register">REGISTER</string>
     <string name="last_name">Last Name</string>
@@ -21,7 +17,7 @@
     <string name="username_identifier">Username (Identifier)</string>
     <string name="new_user_registration">New User Registration</string>
     <string name="gym_logo">Gym Logo</string>
-    <string name="go_back_to_login">Go back to Login</string>
+    <string name="button_back">Back</string>
 
     <!-->Config Spiner-->
     <string-array name="array_user_type">
@@ -29,20 +25,16 @@
         <item>Trainer</item>
     </string-array>
 
-
     <!-- activity workouts-->
     <string name="title_workouts">Workouts</string>
     <string name="content_description_gym_logo">Gym Logo</string>
-    <string name="hint_filter_level">Filter by Level</string>
+    <string name="filter_level">Filter by Level</string>
     <string name="button_filter">Filter</string>
     <string name="button_profile">Profile</string>
     <string name="button_play">Play</string>
-    <string name="button_back">Back</string>
     <string name="label_level">Level:</string>
     <string name="label_num_exercises">Exercises:</string>
-    <string name="button_view_video_description">Watch Video</string>
-
-
+    <string name="button_video">Watch Video</string>
 
     <!--Entrenador -->
     <string name="title_trainer_management">Trainer Management</string>
@@ -54,7 +46,6 @@
     <string name="button_modify">MODIFY</string>
     <string name="button_delete">DELETE</string>
     <string name="title_user_profile">Profile</string>
-
 
     <!--Profile-->
     <string name="hint_username_or_email">Username or Email</string>
@@ -91,7 +82,6 @@
 
     <!--ViewHolder-->
     <string name="ID">ID</string>
-    <string name="username">username</string>
     <string name="Password">Password</string>
     <string name="button_add_new_workout">new workout</string>
     <string name="button_save">Save</string>

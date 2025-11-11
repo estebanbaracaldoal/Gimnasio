@@ -1,18 +1,12 @@
 package com.esteban.gimnasio
 
-import android.app.ActivityOptions
-import android.content.Intent
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioGroup
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.esteban.gimnasio.data.MyRoomDatabase
 import com.esteban.gimnasio.data.dao.GimnasioDao
@@ -21,208 +15,185 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
-import androidx.core.content.edit
 
 class ProfileActivity : AppCompatActivity() {
 
-    private lateinit var loginEditText: EditText
-    private lateinit var nombreEditText: EditText
-    private lateinit var apellidosEditText: EditText
-    private lateinit var emailEditText: EditText
-    private lateinit var fechaNacEditText: EditText
-
+    private lateinit var editLogin: EditText
+    private lateinit var editNombre: EditText
+    private lateinit var editApellidos: EditText
+    private lateinit var editEmail: EditText
+    private lateinit var editFechaNac: EditText
     private lateinit var radioGroupTheme: RadioGroup
+    private lateinit var radioLight: RadioButton
+    private lateinit var radioDark: RadioButton
     private lateinit var spinnerLanguage: Spinner
-    private lateinit var saveButton: Button
-    private lateinit var gimnasioDao: GimnasioDao
+    private lateinit var buttonSave: Button
+    private lateinit var buttonBack: Button
+
     private lateinit var preferences: SharedPreferences
-    private var currentUserId: Long = -1L 
-    private var currentUserPassword: String = ""
-    private val PREFS_FILE = "profilePrefs"
+    private lateinit var gimnasioDao: GimnasioDao
+
+    private val languages = arrayOf("english", "spanish")
+    private var isSpinnerInitialized = false
+    private var user: GimnasioEntity? = null
+
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences("settings", MODE_PRIVATE)
+        val lang = prefs.getString("app_language", "english") ?: "english"
+        super.attachBaseContext(updateLocaleContext(newBase, lang))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        preferences = getSharedPreferences("settings", MODE_PRIVATE)
+
+        val isDarkMode = preferences.getBoolean("dark_mode", false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-
-        val backButton : Button = findViewById(R.id.button_back_profile)
         val db = MyRoomDatabase.getDatabase(applicationContext)
         gimnasioDao = db.gimnasioDao()
-        preferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE)
 
-        backButton.setOnClickListener {
-            finish()
-        }
-
-        setupViews()
-        loadUserProfile()
-        setupListeners()
-        loadPreferences()
+        initViews()
+        setupLanguageSpinner()
+        setupThemeSelector()
+        setupButtons()
+        loadUserData()
     }
 
-
-    private fun setupViews() {
-        loginEditText = findViewById(R.id.edit_text_login)
-        nombreEditText = findViewById(R.id.edit_text_nombre)
-        apellidosEditText = findViewById(R.id.edit_text_apellidos)
-        emailEditText = findViewById(R.id.edit_text_email)
-        fechaNacEditText = findViewById(R.id.edit_text_fecha_nac)
+    private fun initViews() {
+        editLogin = findViewById(R.id.edit_text_login)
+        editNombre = findViewById(R.id.edit_text_nombre)
+        editApellidos = findViewById(R.id.edit_text_apellidos)
+        editEmail = findViewById(R.id.edit_text_email)
+        editFechaNac = findViewById(R.id.edit_text_fecha_nac)
         radioGroupTheme = findViewById(R.id.radio_group_theme)
+        radioLight = findViewById(R.id.radio_theme_light)
+        radioDark = findViewById(R.id.radio_theme_dark)
         spinnerLanguage = findViewById(R.id.spinner_language)
-        saveButton = findViewById(R.id.button_save_profile)
-        loginEditText.isEnabled = false
+        buttonSave = findViewById(R.id.button_save_profile)
+        buttonBack = findViewById(R.id.button_back_profile)
+        editLogin.isEnabled = false
     }
-    private fun setupListeners() {
-        saveButton.setOnClickListener {
-            saveUserProfile()
-            finish()
+
+    private fun loadUserData() {
+        val username =
+            getSharedPreferences("loginPrefs", MODE_PRIVATE).getString("active_username", null)
+                ?: return
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val dbUser = gimnasioDao.getUserByUsername(username)
+            withContext(Dispatchers.Main) {
+                if (dbUser != null) {
+                    user = dbUser
+                    editLogin.setText(dbUser.username)
+                    editNombre.setText(dbUser.firstName)
+                    editApellidos.setText(dbUser.lastName)
+                    editEmail.setText(dbUser.email)
+                    editFechaNac.setText(dbUser.dateBirth)
+                } else {
+                    Toast.makeText(
+                        this@ProfileActivity, "No se pudo cargar el perfil", Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+            }
         }
+    }
+
+    private fun setupThemeSelector() {
+        val isDarkMode = preferences.getBoolean("dark_mode", false)
+        radioDark.isChecked = isDarkMode
+        radioLight.isChecked = !isDarkMode
 
         radioGroupTheme.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.radio_theme_light -> setAppTheme(AppCompatDelegate.MODE_NIGHT_NO, "light")
-                R.id.radio_theme_dark -> setAppTheme(AppCompatDelegate.MODE_NIGHT_YES, "dark")
+                R.id.radio_theme_light -> setAppTheme(false)
+                R.id.radio_theme_dark -> setAppTheme(true)
             }
         }
+    }
+
+    private fun setAppTheme(darkMode: Boolean) {
+        preferences.edit { putBoolean("dark_mode", darkMode) }
+        AppCompatDelegate.setDefaultNightMode(
+            if (darkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
+    }
+
+    private fun setupLanguageSpinner() {
+        val savedLang = preferences.getString("app_language", "english") ?: "english"
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languages)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerLanguage.adapter = adapter
+
+        val position = languages.indexOf(savedLang)
+        if (position >= 0) spinnerLanguage.setSelection(position)
 
         spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long
             ) {
-                val selectedLanguage = parent.getItemAtPosition(position).toString()
-                if (selectedLanguage.isNotBlank() && getLanguagePref() != selectedLanguage) {
-                    setAppLanguage(selectedLanguage)
+                if (!isSpinnerInitialized) {
+                    isSpinnerInitialized = true
+                    return
+                }
+                val selectedLanguage = languages[position]
+                if (selectedLanguage != savedLang) {
+                    preferences.edit { putString("app_language", selectedLanguage) }
+                    recreate()
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-//
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    private fun loadUserProfile() {
-        val loggedInUsername = getSharedPreferences("loginPrefs", MODE_PRIVATE)
-            .getString("active_username", null)
+    private fun setupButtons() {
+        buttonSave.setOnClickListener {
+            user?.let { u ->
+                val newNombre = editNombre.text.toString()
+                val newApellidos = editApellidos.text.toString()
+                val newEmail = editEmail.text.toString()
+                val newFecha = editFechaNac.text.toString()
 
-        if (loggedInUsername == null) {
-            Toast.makeText(this, "Error: Usuario no autenticado.", Toast.LENGTH_LONG).show()
+                val updatedUser = u.copy(
+                    firstName = newNombre,
+                    lastName = newApellidos,
+                    email = newEmail,
+                    dateBirth = newFecha
+                )
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    gimnasioDao.updateUser(updatedUser)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@ProfileActivity, "Perfil guardado", Toast.LENGTH_SHORT)
+                            .show()
+                        finish()
+                    }
+                }
+            }
+        }
+
+        buttonBack.setOnClickListener {
             finish()
-            return
         }
+    }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val user = gimnasioDao.getUserByUsername(loggedInUsername)
-
-            withContext(Dispatchers.Main) {
-                if (user != null) {
-                    currentUserId = user.id
-                    currentUserPassword = user.password 
-
-                    loginEditText.setText(user.username)
-                    nombreEditText.setText(user.firstName)
-                    apellidosEditText.setText(user.lastName)
-                    emailEditText.setText(user.email)
-                    fechaNacEditText.setText(user.dateBirth)
-                } else {
-                    Toast.makeText(this@ProfileActivity, "Error al cargar perfil.", Toast.LENGTH_LONG).show()
-                    finish()
-                }
+    private fun updateLocaleContext(base: Context, language: String): Context {
+        val locale = Locale.forLanguageTag(
+            when (language.lowercase(Locale.ROOT)) {
+                "spanish" -> "es"
+                else -> "en"
             }
-        }
-
-
-    }
-    private fun saveUserProfile() {
-        val newNombre = nombreEditText.text.toString().trim()
-        val newApellidos = apellidosEditText.text.toString().trim()
-        val newEmail = emailEditText.text.toString().trim()
-        val newFechaNac = fechaNacEditText.text.toString().trim()
-        val currentLogin = loginEditText.text.toString()
-
-        if (newNombre.isEmpty() || newEmail.isEmpty() || newFechaNac.isEmpty()) {
-            Toast.makeText(this, "Todos los campos son obligatorios.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val updatedUser = GimnasioEntity(
-            id = currentUserId,
-            username = currentLogin,
-            password = currentUserPassword,
-            firstName = newNombre,
-            lastName = newApellidos,
-            email = newEmail,
-            dateBirth = newFechaNac,
-            rememberMe = "user"
         )
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                gimnasioDao.updateUser(updatedUser)
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@ProfileActivity, "Perfil actualizado con éxito.", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@ProfileActivity, "Error al guardar: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+        val config = base.resources.configuration
+        config.setLocales(android.os.LocaleList(locale))
+        return base.createConfigurationContext(config)
     }
-
-    private fun loadPreferences() {
-        val savedTheme = preferences.getString("app_theme", "light")
-        if (savedTheme == "dark") {
-            radioGroupTheme.check(R.id.radio_theme_dark)
-        } else {
-            radioGroupTheme.check(R.id.radio_theme_light)
-        }
-
-        val savedLang = getLanguagePref()
-        val langArray = resources.getStringArray(R.array.language_options)
-        val position = langArray.indexOfFirst { it.contains(savedLang, ignoreCase = true) }
-        if (position >= 0) {
-            spinnerLanguage.setSelection(position)
-        }
-    }
-
-    private fun setAppTheme(mode: Int, themeName: String) {
-        preferences.edit { putString("app_theme", themeName) }
-
-        AppCompatDelegate.setDefaultNightMode(mode)
-    }
-
-    private fun getLanguagePref(): String {
-        return preferences.getString("app_language", "Español") ?: "Español"
-    }
-
-    private fun setAppLanguage(languageName: String) {
-        preferences.edit { putString("app_language", languageName) }
-
-        val localeCode = when (languageName) {
-            "Español" -> "es"
-            "English" -> "en"
-            else -> "en" 
-        }
-        val locale = Locale.forLanguageTag(localeCode)
-        Locale.setDefault(locale)
-        val configuration = resources.configuration
-        configuration.setLocale(locale)
-
-        val refreshIntent = Intent(this, ProfileActivity::class.java)
-        refreshIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-        ActivityOptions.makeCustomAnimation(
-            this,
-            android.R.anim.fade_in, 
-            android.R.anim.fade_out
-        )
-
-    }
-
-
-
 }
+

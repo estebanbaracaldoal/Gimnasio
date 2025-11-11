@@ -36,7 +36,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:autofillHints="level"
-        android:hint="@string/hint_filter_level"
+        android:hint="@string/filter_level"
         android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/btn_filter"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
         android:id="@+id/bottom_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurfaceContainerHigh"
+        android:background="#77619D"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -101,6 +101,7 @@
             app:layout_constraintStart_toEndOf="@+id/btn_profile"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+
         <Button
             android:id="@+id/btn_back"
             style="@style/Widget.AppCompat.Button.Borderless"
@@ -119,7 +120,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="@string/button_add_new_workout"
-            android:visibility="gone"  app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

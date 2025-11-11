@@ -1,6 +1,7 @@
 package com.esteban.gimnasio
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,12 +17,29 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Locale
-
-
-
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var db: MyRoomDatabase
+    private val prefsFile = "profilePrefs"
+
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences(prefsFile, MODE_PRIVATE)
+        val languageName = prefs.getString("app_language", "Español") ?: "Español"
+
+        val localeCode = when (languageName) {
+            "English" -> "en"
+            "Español" -> "es"
+            else -> "es"
+        }
+
+        val locale = Locale.forLanguageTag(localeCode)
+        val configuration = newBase.resources.configuration
+
+        configuration.setLocale(locale)
+        val context = newBase.createConfigurationContext(configuration)
+
+        super.attachBaseContext(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +49,6 @@ class RegisterActivity : AppCompatActivity() {
 
         setupClickListeners()
     }
-
     private fun setupClickListeners() {
         val loginEditText: EditText = findViewById(R.id.edit_text_reg_login)
         val passwordEditText: EditText = findViewById(R.id.edit_text_reg_pass)
@@ -41,9 +58,16 @@ class RegisterActivity : AppCompatActivity() {
         val fechaNacEditText: EditText = findViewById(R.id.edit_text_reg_fecha_nac)
         val tipoUsuarioSpinner: Spinner = findViewById(R.id.spinner_tipo_usuario)
         val registroButton: Button = findViewById(R.id.button_registro_confirm)
-        val volverButton: Button = findViewById(R.id.button_volver)
+        val buttonBack: Button = findViewById(R.id.button_volver)
 
-
+        loginEditText.hint = getString(R.string.username_identifier)
+        passwordEditText.hint = getString(R.string.password)
+        nombreEditText.hint = getString(R.string.first_name)
+        apellidosEditText.hint = getString(R.string.last_name)
+        emailEditText.hint = getString(R.string.email)
+        fechaNacEditText.hint = getString(R.string.date_of_birth)
+        registroButton.text = getString(R.string.register)
+        buttonBack.text = getString(R.string.button_back)
 
         setupDatePicker(fechaNacEditText)
 
@@ -61,7 +85,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        volverButton.setOnClickListener {
+        buttonBack.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -108,8 +132,6 @@ class RegisterActivity : AppCompatActivity() {
         const val REGIS_USERNAME = "REGIS_USERNAME"
         const val REGIS_PASSWORD = "REGIS_PASSWORD"
     }
-
-
     private fun registerUser(
         username: String,
         password: String,
@@ -129,8 +151,8 @@ class RegisterActivity : AppCompatActivity() {
                     email = email,
                     dateBirth = dateBirth,
                     rememberMe = when (userType) {
-                        "Trainer" -> "admin"
-                        "User" -> "user"
+                        "admin" -> "admin"
+                        "user" -> "user"
                         else -> "user"
                     }
 

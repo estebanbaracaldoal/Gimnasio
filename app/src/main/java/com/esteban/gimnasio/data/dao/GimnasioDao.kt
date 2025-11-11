@@ -14,10 +14,10 @@ interface GimnasioDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(user: GimnasioEntity): Long
 
-    @Query("SELECT * FROM t_users WHERE username = :username AND password = :password")
+    @Query("SELECT * FROM t_users WHERE LOWER(username) = LOWER(:username) AND password = :password LIMIT 1")
     suspend fun getUserByCredentials(username: String, password: String): GimnasioEntity?
 
-    @Query("SELECT * FROM t_users WHERE username = :username")
+    @Query("SELECT * FROM t_users WHERE LOWER(username) = LOWER(:username) LIMIT 1")
     suspend fun getUserByUsername(username: String): GimnasioEntity?
 
     @Query("SELECT * FROM t_users WHERE email = :email")

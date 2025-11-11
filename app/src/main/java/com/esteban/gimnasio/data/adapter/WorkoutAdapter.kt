@@ -1,8 +1,9 @@
-package com.esteban.gimnasio.adapter
+package com.esteban.gimnasio.data.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+//import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,16 +15,19 @@ class WorkoutAdapter(
     private val onVideoClick: (String) -> Unit,
     private val onEditClick: (Int) -> Unit
 ) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>() {
+
     class WorkoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameTextView: TextView = itemView.findViewById(R.id.tv_workout_name)
         val levelTextView: TextView = itemView.findViewById(R.id.tv_level_value)
         val numExercisesTextView: TextView = itemView.findViewById(R.id.tv_exercises_value)
+
+        // ⬅️ CRÍTICO: Cambiar el tipo de Button a ImageButton
         val videoButton: ImageButton = itemView.findViewById(R.id.btn_view_video)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_workout, parent, false)
+            .inflate(R.layout.item_workout, parent, false) // Asumiendo item_workout.xml
         return WorkoutViewHolder(view)
     }
 
@@ -34,18 +38,21 @@ class WorkoutAdapter(
         holder.levelTextView.text = currentWorkout.level
         holder.numExercisesTextView.text = currentWorkout.numExercises.toString()
 
+        // 1. Listener para el botón de Video (Para todos los usuarios)
         holder.videoButton.setOnClickListener {
             onVideoClick(currentWorkout.videoUrl)
         }
 
+        // 2. Listener para el ITEM COMPLETO (Solo usado para Edición por el Admin)
         holder.itemView.setOnClickListener {
-            onEditClick(currentWorkout.id)
+            onEditClick(currentWorkout.id) // Pasa el ID del workout al WorkoutsActivity
         }
     }
+
     override fun getItemCount(): Int = workouts.size
+
     fun updateList(newWorkouts: List<Workout>) {
         workouts = newWorkouts
         notifyDataSetChanged()
-
     }
 }

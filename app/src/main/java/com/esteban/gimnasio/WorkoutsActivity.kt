@@ -3,7 +3,6 @@ package com.esteban.gimnasio
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -21,11 +20,12 @@ class WorkoutsActivity : AppCompatActivity() {
     private lateinit var workoutDao: WorkoutDao
     private lateinit var filterEditText: EditText
     private lateinit var filterButton: Button
-    private lateinit var centerActionButton: Button 
+    private lateinit var centerActionButton: Button
 
     companion object {
         const val USER_ROLE_KEY = "USER_ROLE"
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,8 @@ class WorkoutsActivity : AppCompatActivity() {
         workoutDao = db.workoutDao()
 
         val userRole = intent.getStringExtra(USER_ROLE_KEY) ?: "user"
-        val isAdmin = userRole.lowercase() == "admin"
+        val adminPrivileges = userRole == "admin"
+
 
         val backButton: Button = findViewById(R.id.btn_back)
         val profileButton: Button = findViewById(R.id.btn_profile)
@@ -45,8 +46,9 @@ class WorkoutsActivity : AppCompatActivity() {
         filterEditText = findViewById(R.id.et_filter_level)
         filterButton = findViewById(R.id.btn_filter)
 
-        if (isAdmin) {
+        if (adminPrivileges) {
             centerActionButton.text = getString(R.string.button_add_new_workout)
+            centerActionButton.visibility = View.VISIBLE
             centerActionButton.setOnClickListener {
                 val intent = Intent(this, TrainerActivity::class.java)
                 startActivity(intent)
@@ -60,14 +62,13 @@ class WorkoutsActivity : AppCompatActivity() {
             workouts = emptyList(),
             onVideoClick = { videoLink -> openWorkoutVideo(videoLink) },
             onEditClick = { workoutId ->
-                if (isAdmin) {
+                if (adminPrivileges) {
                     val intent = Intent(this, TrainerActivity::class.java).apply {
                         putExtra(TrainerActivity.EXTRA_WORKOUT_ID, workoutId)
                     }
                     startActivity(intent)
                 }
-            }
-        )
+            })
         recyclerView.adapter = adapter
 
         observeTrainersData()
@@ -77,7 +78,7 @@ class WorkoutsActivity : AppCompatActivity() {
             if (level.isNotBlank()) {
                 observeFilteredTrainers(level)
             } else {
-                observeTrainersData() 
+                observeTrainersData()
             }
         }
 
@@ -103,7 +104,9 @@ class WorkoutsActivity : AppCompatActivity() {
         workoutDao.getWorkoutsByLevel(level).observe(this) { workouts ->
             adapter.updateList(workouts)
             if (workouts.isEmpty()) {
-                Toast.makeText(this, "No se encontraron  niveles de workouts: $level", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, "No se encontraron  niveles de workouts: $level", Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

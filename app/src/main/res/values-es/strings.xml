@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">Gimnasio</string>
+    <string name="logo_of_my_application">Logo de mi aplicación</string>
+    <string name="username">Usuario</string>
+    <string name="remember_me">Recuérdame</string>
+    <string name="sign_in">Iniciar sesión</string>
+    <string name="create_account">¿No tienes cuenta? Crea una aquí.</string>
+
+    <!-- Registro -->
+    <string name="email">Correo electrónico</string>
+    <string name="date_of_birth">Fecha de nacimiento (DD/MM/AAAA)</string>
+    <string name="user_type">Tipo de usuario:</string>
+    <string name="register">REGISTRAR</string>
+    <string name="last_name">Apellidos</string>
+    <string name="first_name">Nombre</string>
+    <string name="password">Contraseña</string>
+    <string name="username_identifier">Nombre de usuario (identificador)</string>
+    <string name="new_user_registration">Registro de nuevo usuario</string>
+    <string name="gym_logo">Logo del gimnasio</string>
+    <string name="button_back">Atrás</string>
+
+    <string-array name="array_user_type">
+        <item>Usuario</item>
+        <item>Entrenador</item>
+    </string-array>
+
+    <!-- Workouts -->
+    <string name="title_workouts">Entrenamientos</string>
+    <string name="content_description_gym_logo">Logo del gimnasio</string>
+    <string name="filter_level">Filtrar por nivel</string>
+    <string name="button_filter">Filtrar</string>
+    <string name="button_profile">Perfil</string>
+    <string name="button_play">Reproducir</string>
+    <string name="label_level">Nivel:</string>
+    <string name="label_num_exercises">Ejercicios:</string>
+    <string name="button_video">Ver video</string>
+
+    <!-- Entrenador -->
+    <string name="title_trainer_management">Gestión de entrenamientos</string>
+    <string name="hint_trainer_name">Nombre del entrenamiento</string>
+    <string name="hint_trainer_level">Nivel (por ejemplo, Básico, Avanzado)</string>
+    <string name="hint_num_exercises">Número de ejercicios</string>
+    <string name="hint_workout_video_link">Video del entrenamiento (URL)</string>
+    <string name="button_add">AGREGAR</string>
+    <string name="button_modify">MODIFICAR</string>
+    <string name="button_delete">ELIMINAR</string>
+    <string name="title_user_profile">Perfil</string>
+
+    <!-- Perfil -->
+    <string name="hint_username_or_email">Usuario o correo</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="checkbox_remember_me">Recuérdame</string>
+    <string name="button_login">Iniciar sesión</string>
+
+    <string name="title_user_registration">Registro de nuevo usuario</string>
+    <string name="hint_username_identifier">Usuario (identificador)</string>
+    <string name="hint_first_name">Nombre</string>
+    <string name="hint_last_name">Apellidos</string>
+    <string name="hint_email">Correo electrónico</string>
+    <string name="hint_date_of_birth">Fecha de nacimiento (DD/MM/AAAA)</string>
+    <string name="label_user_type">Tipo de usuario:</string>
+    <string name="button_register">Registrar</string>
+    <string name="button_go_back_to_login">Volver al inicio de sesión</string>
+
+    <string name="hint_profile_login">Usuario (identificador)</string>
+    <string name="hint_profile_first_name">Nombre</string>
+    <string name="hint_profile_last_name">Apellidos</string>
+    <string name="hint_profile_email">Correo electrónico</string>
+    <string name="hint_profile_dob">Fecha de nacimiento (DD/MM/AAAA)</string>
+    <string name="label_theme">Tema:</string>
+    <string name="label_language">Idioma:</string>
+    <string name="option_light_theme">Claro</string>
+    <string name="option_dark_theme">Oscuro</string>
+    <string name="option_spanish">Español</string>
+    <string name="option_english">Inglés</string>
+    <string name="button_back_to_workouts">Volver a entrenamientos</string>
+
+    <string name="ID">ID</string>
+    <string name="Password">Contraseña</string>
+    <string name="button_add_new_workout">Nuevo entrenamiento</string>
+    <string name="button_save">Guardar</string>
+
+    <string-array name="language_options">
+        <item>Español</item>
+        <item>English</item>
+    </string-array>
+</resources>
